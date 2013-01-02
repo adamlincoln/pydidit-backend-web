@@ -1,4 +1,4 @@
-This file requires editing
+pydidit-backend-web
 ==========================
 
 pydidit is a todo system flexible enough to fit your style.
