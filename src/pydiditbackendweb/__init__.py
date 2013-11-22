@@ -48,6 +48,7 @@ for function_name in [
                'link',
                'flush',
                'commit',
+               'relationship_name',
               ]:
     exec function_template.format(function_name=function_name)
 
