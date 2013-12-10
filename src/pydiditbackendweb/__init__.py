@@ -2,6 +2,7 @@ import os
 import requests
 import ConfigParser
 import simplejson as json
+from datetime import datetime
 
 
 base_url = None
@@ -25,7 +26,17 @@ def _send(f, args, kwargs):
         'args': json.dumps(args),
         'kwargs': json.dumps(kwargs),
     }
-    return json.loads(requests.post(base_url, data=data).text)
+    to_return = json.loads(requests.post(base_url, data=data).text)
+    for el in to_return:
+        for k, v in el.iteritems():
+            if isinstance(v, basestring):
+                try:
+                    dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                except ValueError:
+                    pass
+                else:
+                    el[k] = dt
+    return to_return
 
 
 function_template = '''def {function_name}(*args, **kwargs):
