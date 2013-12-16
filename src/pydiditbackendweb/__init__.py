@@ -20,22 +20,29 @@ def initialize(ini_filenames=(os.path.expanduser('~/.pydiditrc'),
     base_url = settings['url']
 
 
+def encode_datetime(v):
+    if hasattr(v, 'isoformat'):
+        return v.isoformat()
+    raise TypeError
+
+
 def _send(f, args, kwargs):
     data = {
         'f': f,
-        'args': json.dumps(args),
-        'kwargs': json.dumps(kwargs),
+        'args': json.dumps(args, default=encode_datetime),
+        'kwargs': json.dumps(kwargs, default=encode_datetime),
     }
     to_return = json.loads(requests.post(base_url, data=data).text)
     for el in to_return:
-        for k, v in el.iteritems():
-            if isinstance(v, basestring):
-                try:
-                    dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
-                except ValueError:
-                    pass
-                else:
-                    el[k] = dt
+        if isinstance(el, dict): # Yeah, I know, duck typing, yeah yeah
+            for k, v in el.iteritems():
+                if isinstance(v, basestring):
+                    try:
+                        dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+                    except ValueError:
+                        pass
+                    else:
+                        el[k] = dt
     return to_return
 
 
