@@ -26,24 +26,25 @@ def encode_datetime(v):
     raise TypeError
 
 
+def decode_datetime(initial_result):
+    for k, v in initial_result.iteritems():
+        if isinstance(v, basestring):
+            try:
+                dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
+            except ValueError:
+                pass
+            else:
+                initial_result[k] = dt
+    return initial_result
+
+
 def _send(f, args, kwargs):
     data = {
         'f': f,
         'args': json.dumps(args, default=encode_datetime),
         'kwargs': json.dumps(kwargs, default=encode_datetime),
     }
-    to_return = json.loads(requests.post(base_url, data=data).text)
-    for el in to_return:
-        if isinstance(el, dict): # Yeah, I know, duck typing, yeah yeah
-            for k, v in el.iteritems():
-                if isinstance(v, basestring):
-                    try:
-                        dt = datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f')
-                    except ValueError:
-                        pass
-                    else:
-                        el[k] = dt
-    return to_return
+    return json.loads(requests.post(base_url, data=data).text, object_hook=decode_datetime)
 
 
 function_template = '''def {function_name}(*args, **kwargs):
