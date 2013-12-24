@@ -65,6 +65,7 @@ for function_name in [
                'set_completed',
                'set_attributes',
                'link',
+               'unlink',
                'flush',
                'commit',
                'relationship_name',
