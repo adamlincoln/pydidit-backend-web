@@ -71,7 +71,7 @@ for function_name in [
                'unlink',
                'flush',
                'relationship_name',
-                'swap_display_positions',
+               'swap_display_positions',
               ]:
     exec function_template.format(function_name=function_name)
 
