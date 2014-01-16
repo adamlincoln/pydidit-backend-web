@@ -72,6 +72,7 @@ for function_name in [
                'flush',
                'relationship_name',
                'swap_display_positions',
+               'move',
               ]:
     exec function_template.format(function_name=function_name)
 
