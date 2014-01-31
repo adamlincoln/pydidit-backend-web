@@ -73,6 +73,7 @@ for function_name in [
                'relationship_name',
                'swap_display_positions',
                'move',
+               'search',
               ]:
     exec function_template.format(function_name=function_name)
 
