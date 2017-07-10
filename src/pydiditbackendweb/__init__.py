@@ -102,6 +102,8 @@ functions = {
     'get_workspaces': True,
     'create_user': True,
     'create_workspace': True,
+    'give_permission': True,
+    'revoke_permission': True,
 }
 
 for function_name in functions.keys():
