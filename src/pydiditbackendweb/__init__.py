@@ -5,8 +5,6 @@ import simplejson as json
 from datetime import datetime
 import stat
 
-default_ini_filename = os.path.expanduser('~/.pydidit-backendwebrc')
-
 base_url = None
 access_token_file_path = None
 
@@ -15,21 +13,16 @@ access_token_file_path = None
 access_token = None
 
 
-def initialize(ini_filenames=(default_ini_filename,)):
-    ini = ConfigParser.SafeConfigParser()
-    ini.read(ini_filenames)
-
-    settings = dict(ini.items('backend'))
-
+def initialize(backend_settings):
     global base_url
-    if 'url' not in settings:
-        raise Exception('"url" not available in settings.')
-    base_url = settings['url']
+    if 'url' not in backend_settings:
+        raise Exception('"url" not available in backend_settings.')
+    base_url = backend_settings['url']
 
     global access_token_file_path
-    access_token_file_path = settings.get(
+    access_token_file_path = backend_settings.get(
         'access_token_file',
-        os.path.expanduser('~/.pydidit-cli-token')
+        os.path.expanduser('~/.pydidit-token')
     )
 
 
