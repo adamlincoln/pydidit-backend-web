@@ -8,7 +8,7 @@ import stat
 base_url = None
 access_token_file_path = None
 
-# A client front end must call check_initial_token()
+# A client front end must call check_access_token()
 # (or trade_initial_token()) to put a username in this global.
 access_token = None
 
@@ -107,7 +107,7 @@ for function_name in functions.keys():
 def commit(*args, **kwargs):
     pass
 
-def check_initial_token(username, try_authed_call=True):
+def check_access_token(username, try_authed_call=True):
     # For now, store the access token in a 0600 file in $HOME.
     # If the file is there but not 0600, exit and warn the user.
     try:
@@ -151,7 +151,7 @@ def trade_initial_token(username, initial_token):
     new_access_token = response.json()['access_token']
     tokens = {}
     # Access race here
-    if check_initial_token(username) is not None:
+    if check_access_token(username) is not None:
         with open(access_token_file_path, 'r') as fileh:
             tokens = json.load(fileh)
 
